@@ -52,9 +52,15 @@
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label class="layui-form-label required">邮箱密钥</label>
+                        <label class="layui-form-label required">用户名</label>
                         <div class="layui-input-block">
-                            <input type="text" name="key" value="@ViewBag.key" lay-verify="required" class="layui-input" lay-reqtext="邮箱密钥不能为空" placeholder="请输入邮箱密钥">
+                            <input type="text" name="userName" value="@ViewBag.userName" lay-verify="required" class="layui-input" lay-reqtext="用户名不能为空" placeholder="请输入用户名">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="key" value="@ViewBag.key" lay-verify="required" class="layui-input" lay-reqtext="密码不能为空" placeholder="请输入邮箱密码">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -67,6 +73,12 @@
                         <label class="layui-form-label required">收件人邮箱</label>
                         <div class="layui-input-block">
                             <input type="text" name="reciveEmial" value="@ViewBag.reciveEmial" lay-verify="required|email" class="layui-input" lay-reqtext="收件人邮箱不能为空" placeholder="请输入收件人邮箱">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">启用SSl加密:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" @ViewBag.sslEnable name="sslEnable" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
                         </div>
                     </div>
                     <div class="layui-form-item">
