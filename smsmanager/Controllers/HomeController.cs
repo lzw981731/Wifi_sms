@@ -726,7 +726,7 @@ namespace smsmanager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult EmailfowardStatusChange(string kg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial,string sslEnable)
+        public IActionResult EmailfowardStatusChange(string kg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial,string sslkg)
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             XmlDocument MyXml = new XmlDocument();
@@ -743,7 +743,7 @@ namespace smsmanager.Controllers
                 element.GetElementsByTagName("emailKey")[0].InnerText = key;
                 element.GetElementsByTagName("sendEmial")[0].InnerText = sendEmial;
                 element.GetElementsByTagName("reciveEmial")[0].InnerText = reciveEmial;
-                element.GetElementsByTagName("sslEnable")[0].InnerText = sslEnable;
+                element.GetElementsByTagName("sslEnable")[0].InnerText = sslkg;
             }
             MyXml.Save(orgCodePath);
 
@@ -756,7 +756,7 @@ namespace smsmanager.Controllers
                 ViewBag.key = element.GetElementsByTagName("emailKey")[0].InnerText;
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
                 ViewBag.reciveEmial = element.GetElementsByTagName("reciveEmial")[0].InnerText;
-                ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText;
+                ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? "" : "checked=\"\"";
             }
             clear();
             return View("Emailfoward");
