@@ -37,7 +37,7 @@ namespace smsmanager
             if (!File.Exists(orgCodePath))
             {
                 XmlDocument xmlDoc = new XmlDocument();
-                //¥¥Ω®∏˘Ω⁄µ„  
+                //ÂàõÂª∫Ê†πËäÇÁÇπ  
                 XmlNode root = xmlDoc.CreateElement("userSettings");
                 xmlDoc.AppendChild(root);
                 CreateNode(xmlDoc, root, "username", "admin");
@@ -45,9 +45,11 @@ namespace smsmanager
                 CreateNode(xmlDoc, root, "emailFowardStatus", "0");
                 CreateNode(xmlDoc, root, "smtpHost", "");
                 CreateNode(xmlDoc, root, "smtpPort", "");
+                CreateNode(xmlDoc, root, "userName", "");
                 CreateNode(xmlDoc, root, "emailKey", "");
                 CreateNode(xmlDoc, root, "sendEmial", "");
                 CreateNode(xmlDoc, root, "reciveEmial", "");
+                CreateNode(xmlDoc, root, "sslEnable", "");
                 CreateNode(xmlDoc, root, "WeChatQYFowardStatus", "0");
                 CreateNode(xmlDoc, root, "WeChatQYID", "");
                 CreateNode(xmlDoc, root, "WeChatQYApplicationID", "");
@@ -58,7 +60,7 @@ namespace smsmanager
                 }
                 catch (Exception e)
                 {
-                    //œ‘ æ¥ÌŒÛ–≈œ¢  
+                    //ÊòæÁ§∫ÈîôËØØ‰ø°ÊÅØ  
                     Console.WriteLine(e.Message);
                 }
             }
