@@ -137,8 +137,8 @@
             form.on('switch(needVerify)', function (data) {
                 document.getElementById("verifykg").value = this.checked ? 'true' : 'false';
                 if(this.checked){
-                    document.getElementById("userName").style.display="inline";
-                    document.getElementById("emailkey").style.display="inline";
+                    document.getElementById("userName").style.display="";
+                    document.getElementById("emailkey").style.display="";
                 }else{
                     document.getElementById("userName").style.display="none";
                     document.getElementById("emailkey").style.display="none";
