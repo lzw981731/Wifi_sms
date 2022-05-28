@@ -39,6 +39,12 @@
                             <input type="text" name="sslkg" id="sslkg" value="" lay-verify="required" class="layui-input" >
                         </div>
                     </div>
+                    <div class="layui-form-item" style="display:none">
+                        <label class="layui-form-label required">sslkg</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="verifykg" id="verifykg" value="" lay-verify="required" class="layui-input" >
+                        </div>
+                    </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label required">短信邮箱转发开关:</label>
                         <div class="layui-input-block">
@@ -57,13 +63,19 @@
                             <input type="text" name="smtpport" value="@ViewBag.smtpPort" lay-verify="required|number" class="layui-input" lay-reqtext="smtp服务器不能为空" placeholder="请输入smtp服务器">
                         </div>
                     </div>
-                    <div class="layui-form-item">
+                     <div class="layui-form-item">
+                        <label class="layui-form-label required">需要验证:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" @ViewBag.needVerify name="needVerify" value="" lay-skin="switch" lay-filter="needVerify" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="userName">
                         <label class="layui-form-label required">用户名</label>
                         <div class="layui-input-block">
                             <input type="text" name="userName" value="@ViewBag.userName" lay-verify="required" class="layui-input" lay-reqtext="用户名不能为空" placeholder="请输入用户名">
                         </div>
                     </div>
-                    <div class="layui-form-item">
+                    <div class="layui-form-item" id="emailkey">
                         <label class="layui-form-label required">密码</label>
                         <div class="layui-input-block">
                             <input type="text" name="key" value="@ViewBag.key" lay-verify="required" class="layui-input" lay-reqtext="密码不能为空" placeholder="请输入邮箱密码">
@@ -114,6 +126,23 @@
             var form = layui.form
             form.on('switch(sslSwitch)', function (data) {
                 document.getElementById("sslkg").value = this.checked ? 'true' : 'false';
+            });
+        });
+        
+    </script>
+    <script>
+        //监听指定开关
+        layui.use(['form'], function () {
+            var form = layui.form
+            form.on('switch(needVerify)', function (data) {
+                document.getElementById("verifykg").value = this.checked ? 'true' : 'false';
+                if(this.checked){
+                    document.getElementById("userName").style.display="none";
+                    document.getElementById("emailkey").style.display="none";
+                }else{
+                    document.getElementById("userName").style.display="inline";
+                    document.getElementById("emailkey").style.display="inline";
+                }
             });
         });
         
