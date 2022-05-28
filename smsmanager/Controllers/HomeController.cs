@@ -716,6 +716,7 @@ namespace smsmanager.Controllers
                 ViewBag.status = element.GetElementsByTagName("emailFowardStatus")[0].InnerText=="0" ? "" : "checked=\"\"";
                 ViewBag.smtp = element.GetElementsByTagName("smtpHost")[0].InnerText;
                 ViewBag.smtpPort = element.GetElementsByTagName("smtpPort")[0].InnerText;
+                ViewBag.sslEnable = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "" : "checked=\"\"";
                 ViewBag.key = element.GetElementsByTagName("emailKey")[0].InnerText;
                 ViewBag.userName = element.GetElementsByTagName("userName")[0].InnerText;
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
@@ -726,7 +727,7 @@ namespace smsmanager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult EmailfowardStatusChange(string kg,string sslkg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial)
+        public IActionResult EmailfowardStatusChange(string kg,string sslkg,string verifykg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial)
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             XmlDocument MyXml = new XmlDocument();
@@ -739,6 +740,7 @@ namespace smsmanager.Controllers
                 element.GetElementsByTagName("emailFowardStatus")[0].InnerText = kg == "false" ? "0" : "1";
                 element.GetElementsByTagName("smtpHost")[0].InnerText = smtp;
                 element.GetElementsByTagName("smtpPort")[0].InnerText = smtpport;
+                element.GetElementsByTagName("needVerify")[0].InnerText = verifykg == "false" ? "0" : "1";
                 element.GetElementsByTagName("userName")[0].InnerText = userName;
                 element.GetElementsByTagName("emailKey")[0].InnerText = key;
                 element.GetElementsByTagName("sendEmial")[0].InnerText = sendEmial;
@@ -752,6 +754,7 @@ namespace smsmanager.Controllers
                 ViewBag.status = element.GetElementsByTagName("emailFowardStatus")[0].InnerText == "0" ? "" : "checked=\"\"";
                 ViewBag.smtp = element.GetElementsByTagName("smtpHost")[0].InnerText;
                 ViewBag.smtpPort = element.GetElementsByTagName("smtpPort")[0].InnerText;
+                ViewBag.needVerify = element.GetElementsByTagName("needVerify")[0].InnerText == "0" ? "" : "checked=\"\"";
                 ViewBag.userName = element.GetElementsByTagName("userName")[0].InnerText;
                 ViewBag.key = element.GetElementsByTagName("emailKey")[0].InnerText;
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
