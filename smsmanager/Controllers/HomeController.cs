@@ -726,7 +726,7 @@ namespace smsmanager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult EmailfowardStatusChange(string kg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial,string sslkg)
+        public IActionResult EmailfowardStatusChange(string kg,string sslkg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial)
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             XmlDocument MyXml = new XmlDocument();
@@ -743,7 +743,7 @@ namespace smsmanager.Controllers
                 element.GetElementsByTagName("emailKey")[0].InnerText = key;
                 element.GetElementsByTagName("sendEmial")[0].InnerText = sendEmial;
                 element.GetElementsByTagName("reciveEmial")[0].InnerText = reciveEmial;
-                element.GetElementsByTagName("sslEnable")[0].InnerText = sslkg;
+                element.GetElementsByTagName("sslEnable")[0].InnerText = sslkg == "false" ? "0" : "1";
             }
             MyXml.Save(orgCodePath);
 
