@@ -45,6 +45,7 @@ namespace smsmanager
                 CreateNode(xmlDoc, root, "emailFowardStatus", "0");
                 CreateNode(xmlDoc, root, "smtpHost", "");
                 CreateNode(xmlDoc, root, "smtpPort", "");
+                CreateNode(xmlDoc, root, "needVerify", "");
                 CreateNode(xmlDoc, root, "userName", "");
                 CreateNode(xmlDoc, root, "emailKey", "");
                 CreateNode(xmlDoc, root, "sendEmial", "");
