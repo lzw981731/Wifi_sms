@@ -137,16 +137,25 @@
             form.on('switch(needVerify)', function (data) {
                 document.getElementById("verifykg").value = this.checked ? 'true' : 'false';
                 if(this.checked){
-                    document.getElementById("userName").style.display="none";
-                    document.getElementById("emailkey").style.display="none";
-                }else{
                     document.getElementById("userName").style.display="inline";
                     document.getElementById("emailkey").style.display="inline";
+                }else{
+                    document.getElementById("userName").style.display="none";
+                    document.getElementById("emailkey").style.display="none";
                 }
             });
         });
     </script>
-
+    <script>
+        var nav = document.getElementById("needVerify");
+        if(nav.checked){
+            document.getElementById("userName").style.display="inline";
+            document.getElementById("emailkey").style.display="inline";
+        }else{
+            document.getElementById("userName").style.display="none";
+            document.getElementById("emailkey").style.display="none";
+        }
+    </script>
     
 </body>
 </html>
