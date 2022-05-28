@@ -97,7 +97,9 @@ namespace smsmanager
                                                         mm.Subject = "短信转发" + tel;
                                                         mm.Body = text;
                                                         sc.DeliveryMethod = SmtpDeliveryMethod.Network;
-                                                        sc.Credentials = new NetworkCredential(element.GetElementsByTagName("userName")[0].InnerText, element.GetElementsByTagName("emailKey")[0].InnerText);
+                                                        if(element.GetElementsByTagName("needVerify")[0].InnerText == "1"){
+                                                            sc.Credentials = new NetworkCredential(element.GetElementsByTagName("userName")[0].InnerText, element.GetElementsByTagName("emailKey")[0].InnerText);
+                                                        }
                                                         sc.EnableSsl = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? false : true;
                                                         sc.Send(mm);
                                                         Console.WriteLine("转发成功");
