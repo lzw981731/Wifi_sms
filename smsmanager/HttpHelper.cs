@@ -41,7 +41,7 @@ namespace smsmanager
             myStreamReader.Close();
             myResponseStream.Close();
             
-            string[] arrays = new string[]{retString,statusCode}
+            string[] arrays = new string[]{retString,statusCode};
             return arrays;
         }
         
@@ -63,7 +63,7 @@ namespace smsmanager
             myStreamReader.Close();
             myResponseStream.Close();
             
-            string[] arrays = new string[]{retString,statusCode}
+            string[] arrays = new string[]{retString,statusCode};
             return statusCode;
         }
         
