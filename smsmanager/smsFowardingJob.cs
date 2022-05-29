@@ -54,6 +54,7 @@ namespace smsmanager
                 {
                     string status = element.GetElementsByTagName("emailFowardStatus")[0].InnerText;
                     string qystatus = element.GetElementsByTagName("WeChatQYFowardStatus")[0].InnerText;
+                    string webhookstatus = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText;
                     //Console.WriteLine(qystatus);
                     if (status == "1")
                     {
@@ -110,6 +111,87 @@ namespace smsmanager
                                                     {
                                                         mm.Dispose();
                                                         sc.Dispose();
+                                                        Console.WriteLine(ex);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (webhookstatus == "1")
+                    {
+                        Thread.Sleep(1000);
+                        var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
+                        psi.RedirectStandardOutput = true;
+                        using (var process = System.Diagnostics.Process.Start(psi))
+                        {
+                            var output = process.StandardOutput.ReadToEnd();
+                            process.Kill();
+                            if (output != string.Empty && output.Trim() != "No sms messages were found")
+                            {
+                                //int count = 0;
+                                string[] qline = output.Split(Environment.NewLine.ToCharArray());
+                                for (int i = 0; i < qline.Count() - 1; i++)
+                                {
+                                    string[] theRow = qline[i].Split("(");
+                                    if (theRow[1].Trim() == "received)")
+                                    {
+                                        if (!ht.Contains(theRow[0].Trim().Split("SMS/")[1].ToString().Trim()))
+                                        {
+                                            string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
+                                            var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
+                                            psi2.RedirectStandardOutput = true;
+                                            using (var process2 = System.Diagnostics.Process.Start(psi2))
+                                            {
+                                                var output2 = process2.StandardOutput.ReadToEnd();
+                                                process2.Kill();
+                                                if (output2 != string.Empty)
+                                                {
+                                                    string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
+                                                    string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
+                                                    string text = qline2[4].Split("|      text:")[1].Trim();
+                                                    htWc.Add(sid, tel + "_" + text);
+                                                    try
+                                                    {
+                                                    
+                                                        string requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
+                                                        string requestType = element.GetElementsByTagName("requestType")[0].InnerText;
+                                                        if(requestType == "post")
+                                                        {
+                                                            string postData = element.GetElementsByTagName("postValue")[0].InnerText;
+                                                            string postData = postData.Replace("%phone%",tel);
+                                                            string postData = postData.Replace("%message%",text);
+                                                            string msgresult = HttpHelper.Post(requestUrl, postData);
+                                                            JObject jsonObjresult = JObject.Parse(msgresult);
+                                                            string errcode1 = jsonObjresult["errcode"].ToString();
+                                                            string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                            if (errcode == "0" && errmsg == "ok")
+                                                            {
+                                                                Console.WriteLine("WebHook post转发成功");
+                                                            }else{
+                                                                Console.WriteLine(errmsg);
+                                                            }
+                                                    
+                                                        }else{
+                                                            string requestUrl = requestUrl.Replace("%phone%",tel);
+                                                            string requestUrl = requestUrl.Replace("%message%",text);
+                                                            string msgresult = HttpHelper.HttpGet(requestUrl);
+                                                            JObject jsonObjresult = JObject.Parse(msgresult);
+                                                            string errcode1 = jsonObjresult["errcode"].ToString();
+                                                            string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                            if (errcode == "0" && errmsg == "ok")
+                                                            {
+                                                                Console.WriteLine("WebHook post转发成功");
+                                                            }else{
+                                                                Console.WriteLine(errmsg);
+                                                            }
+                                                        }
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
                                                         Console.WriteLine(ex);
                                                     }
                                                 }
