@@ -164,7 +164,7 @@ namespace smsmanager
                                                             string postData = element.GetElementsByTagName("postValue")[0].InnerText;
                                                             postData = postData.Replace("%phone%",tel);
                                                             postData = postData.Replace("%message%",text);
-                                                            msgresult = HttpHelper.Post(requestUrl, postData);
+                                                            string msgresult = HttpHelper.Post(requestUrl, postData);
                                                             JObject jsonObjresult = JObject.Parse(msgresult);
                                                             string errcode = jsonObjresult["errcode"].ToString();
                                                             string errmsg = jsonObjresult["errmsg"].ToString();
