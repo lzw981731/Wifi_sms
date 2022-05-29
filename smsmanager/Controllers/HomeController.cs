@@ -764,6 +764,51 @@ namespace smsmanager.Controllers
             clear();
             return View("Emailfoward");
         }
+        
+        public IActionResult WebHookfoward()
+        {
+            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(orgCodePath);
+            XmlNodeList topM = xmldoc.SelectNodes("//userSettings");
+            foreach (XmlElement element in topM)
+            {
+                ViewBag.status = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText=="0" ? "" : "checked=\"\"";
+                ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "" : "checked=\"\"";
+                ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
+                ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
+            }
+            clear();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult WebHookfowardStatusChange(string kg,string requestTypekg,string requestUrl, string postValue)
+        {
+            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
+            XmlDocument MyXml = new XmlDocument();
+            MyXml.Load(orgCodePath);
+            //获取<Rule>节点的所有子节点
+            XmlNodeList topM = MyXml.SelectNodes("//userSettings");
+            //遍历<Rule>下的所有子节点
+            foreach (XmlElement element in topM)
+            {
+                element.GetElementsByTagName("webHookfowardStatus")[0].InnerText = kg == "false" ? "0" : "1";
+                element.GetElementsByTagName("requestType")[0].InnerText = requestTypekg == "get" ? "get" : "post";
+                element.GetElementsByTagName("requestUrl")[0].InnerText = requestUrl;
+                element.GetElementsByTagName("postValue")[0].InnerText = postValue;
+            }
+            MyXml.Save(orgCodePath);
+
+            foreach (XmlElement element in topM)
+            {
+                ViewBag.status = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText == "0" ? "" : "checked=\"\"";
+                ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText == "get" ? "" : "checked=\"\"";
+                ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
+                ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
+            }
+            clear();
+            return View("WebHookfoward");
+        }
 
         public IActionResult Wechatfoward()
         {
