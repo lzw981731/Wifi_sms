@@ -27,7 +27,7 @@ namespace smsmanager
             return retString;
         }
         
-        public static string HttpGetResultCode(string Url)
+        public static string[] HttpGetResultCode(string Url)
         {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
@@ -35,11 +35,17 @@ namespace smsmanager
             request.ContentType = "text/html;charset=UTF-8";
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             Stream statusCode = response.StatusCode.ToString();
+            Stream myResponseStream = response.GetResponseStream();
+            StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
+            string retString = myStreamReader.ReadToEnd();
+            myStreamReader.Close();
+            myResponseStream.Close();
             
-            return statusCode;
+            string[] arrays = new string[]{retString,statusCode}
+            return arrays;
         }
         
-        public static string PostResultCode(string url, string context)
+        public static string[] PostResultCode(string url, string context)
         {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -49,7 +55,15 @@ namespace smsmanager
             streamWriter.Flush();
             streamWriter.Close();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            
             Stream statusCode = response.StatusCode.ToString();
+            Stream myResponseStream = response.GetResponseStream();
+            StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
+            string retString = myStreamReader.ReadToEnd();
+            myStreamReader.Close();
+            myResponseStream.Close();
+            
+            string[] arrays = new string[]{retString,statusCode}
             return statusCode;
         }
         
