@@ -722,7 +722,7 @@ namespace smsmanager.Controllers
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
                 ViewBag.reciveEmial = element.GetElementsByTagName("reciveEmial")[0].InnerText;
                 ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText=="0" ? "" : "checked=\"\"";
-                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=\"display:none\"" : "";
+                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=display:none" : "";
             }
             clear();
             return View();
@@ -761,7 +761,7 @@ namespace smsmanager.Controllers
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
                 ViewBag.reciveEmial = element.GetElementsByTagName("reciveEmial")[0].InnerText;
                 ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? "" : "checked=\"\"";
-                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=\"display:none\"" : "";
+                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=display:none" : "";
             }
             clear();
             return View("Emailfoward");
@@ -779,7 +779,7 @@ namespace smsmanager.Controllers
                 ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "" : "checked=\"\"";
                 ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
                 ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
-                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=\"display:none\"" : "";
+                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=display:none" : "";
             }
             clear();
             return View();
@@ -808,7 +808,7 @@ namespace smsmanager.Controllers
                 ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText == "get" ? "" : "checked=\"\"";
                 ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
                 ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
-                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=\"display:none\"" : "";
+                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=display:none" : "";
             }
             clear();
             return View("WebHookfoward");
