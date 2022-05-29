@@ -727,7 +727,7 @@ namespace smsmanager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult EmailfowardStatusChange(string kg,string sslkg,string verifykg, string smtp,string smtpport,string userName,string key, string sendEmial, string reciveEmial)
+        public IActionResult EmailfowardStatusChange(string emailFowardStatus, string smtp,string smtpport,string needVerify,string userName,string key, string sendEmial, string reciveEmial, string sslEnable)
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             XmlDocument MyXml = new XmlDocument();
@@ -737,15 +737,15 @@ namespace smsmanager.Controllers
             //遍历<Rule>下的所有子节点
             foreach (XmlElement element in topM)
             {
-                element.GetElementsByTagName("emailFowardStatus")[0].InnerText = kg == "false" ? "0" : "1";
+                element.GetElementsByTagName("emailFowardStatus")[0].InnerText = emailFowardStatus == "" ? "0" : "1";
                 element.GetElementsByTagName("smtpHost")[0].InnerText = smtp;
                 element.GetElementsByTagName("smtpPort")[0].InnerText = smtpport;
-                element.GetElementsByTagName("needVerify")[0].InnerText = verifykg == "false" ? "0" : "1";
+                element.GetElementsByTagName("needVerify")[0].InnerText = needVerify == "" ? "0" : "1";
                 element.GetElementsByTagName("userName")[0].InnerText = userName;
                 element.GetElementsByTagName("emailKey")[0].InnerText = key;
                 element.GetElementsByTagName("sendEmial")[0].InnerText = sendEmial;
                 element.GetElementsByTagName("reciveEmial")[0].InnerText = reciveEmial;
-                element.GetElementsByTagName("sslEnable")[0].InnerText = sslkg == "false" ? "0" : "1";
+                element.GetElementsByTagName("sslEnable")[0].InnerText = sslEnable == "" ? "0" : "1";
             }
             MyXml.Save(orgCodePath);
 
@@ -782,7 +782,7 @@ namespace smsmanager.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult WebHookfowardStatusChange(string kg,string requestTypekg,string requestUrl, string postValue)
+        public IActionResult WebHookfowardStatusChange(string webHookfowardStatus,string requestType,string requestUrl, string postValue)
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             XmlDocument MyXml = new XmlDocument();
@@ -792,8 +792,8 @@ namespace smsmanager.Controllers
             //遍历<Rule>下的所有子节点
             foreach (XmlElement element in topM)
             {
-                element.GetElementsByTagName("webHookfowardStatus")[0].InnerText = kg == "false" ? "0" : "1";
-                element.GetElementsByTagName("requestType")[0].InnerText = requestTypekg == "get" ? "get" : "post";
+                element.GetElementsByTagName("webHookfowardStatus")[0].InnerText = webHookfowardStatus == "" ? "0" : "1";
+                element.GetElementsByTagName("requestType")[0].InnerText = requestType == "" ? "get" : "post";
                 element.GetElementsByTagName("requestUrl")[0].InnerText = requestUrl;
                 element.GetElementsByTagName("postValue")[0].InnerText = postValue;
             }
