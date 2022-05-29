@@ -60,7 +60,7 @@
                     <div class="layui-form-item" id="postValue">
                         <label class="layui-form-label required">自定义POST参数:</label>
                         <div class="layui-input-block">
-                            <input type="text" name="postValue" value="@ViewBag.postValue" lay-verify="required" class="layui-input" lay-reqtext="自定义POST参数不能为空" placeholder="请输入自定义POST参数">
+                            <textarea name="postValue" lay-verify="required" class="layui-textarea" lay-reqtext="自定义POST参数不能为空" placeholder="请输入自定义POST参数">@ViewBag.postValue</textarea>   
                         </div>
                     </div>
                     <div class="layui-form-item">
