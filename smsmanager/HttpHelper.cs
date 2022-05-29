@@ -34,7 +34,7 @@ namespace smsmanager
             request.Method = "GET";
             request.ContentType = "text/html;charset=UTF-8";
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream statusCode = response.StatusCode.ToString();
+            string statusCode = response.StatusCode.ToString();
             Stream myResponseStream = response.GetResponseStream();
             StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
             string retString = myStreamReader.ReadToEnd();
@@ -56,7 +56,7 @@ namespace smsmanager
             streamWriter.Close();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             
-            Stream statusCode = response.StatusCode.ToString();
+            string statusCode = response.StatusCode.ToString();
             Stream myResponseStream = response.GetResponseStream();
             StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
             string retString = myStreamReader.ReadToEnd();
