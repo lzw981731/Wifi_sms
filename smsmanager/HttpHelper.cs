@@ -64,7 +64,7 @@ namespace smsmanager
             myResponseStream.Close();
             
             string[] arrays = new string[]{retString,statusCode};
-            return statusCode;
+            return arrays;
         }
         
         public static string Post(string url, string context)
