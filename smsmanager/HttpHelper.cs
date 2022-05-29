@@ -27,6 +27,20 @@ namespace smsmanager
             return retString;
         }
         
+        public static string PostResultCode(string url, string context)
+        {
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            var streamWriter = new StreamWriter(request.GetRequestStream());
+            streamWriter.Write(context);
+            streamWriter.Flush();
+            streamWriter.Close();
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream statusCode = response.StatusCode.ToString();
+            return statusCode;
+        }
+        
         public static string Post(string url, string context)
         {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
