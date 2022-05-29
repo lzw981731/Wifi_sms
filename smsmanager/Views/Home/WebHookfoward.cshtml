@@ -45,7 +45,7 @@
                             <input type="text" name="requestUrl" value="@ViewBag.requestUrl" lay-verify="required" class="layui-input" lay-reqtext="请求URL不能为空" placeholder="请输入请求URL">
                         </div>
                     </div>
-                    <div class="layui-form-item" id="postValue">
+                    <div class="layui-form-item" id="postValue" @ViewBag.requestTypeNone>
                         <label class="layui-form-label required">自定义POST参数:</label>
                         <div class="layui-input-block">
                             <textarea name="postValue" lay-verify="required" class="layui-textarea" lay-reqtext="自定义POST参数不能为空" placeholder="请输入自定义POST参数">@ViewBag.postValue</textarea>   
