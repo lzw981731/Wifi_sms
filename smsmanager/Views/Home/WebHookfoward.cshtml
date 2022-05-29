@@ -36,7 +36,7 @@
                     <div class="layui-form-item" style="display:none">
                         <label class="layui-form-label required">RequestTypekg</label>
                         <div class="layui-input-block">
-                            <input type="text" name="sslkg" id="RequestTypekg" value="" lay-verify="required" class="layui-input" >
+                            <input type="text" name="requestTypekg" id="requestTypekg" value="" lay-verify="required" class="layui-input" >
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -48,7 +48,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label required">请求方式:</label>
                         <div class="layui-input-block">
-                            <input type="checkbox" @ViewBag.RequestType name="RequestType" value="" lay-skin="switch" lay-filter="RequestType" lay-text="POST|GET">
+                            <input type="checkbox" @ViewBag.requestType name="requestType" value="" lay-skin="switch" lay-filter="RequestType" lay-text="POST|GET">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -88,8 +88,8 @@
         //监听指定开关
         layui.use(['form'], function () {
             var form = layui.form
-            form.on('switch(RequestType)', function (data) {
-                document.getElementById("RequestTypekg").value = this.checked ? 'post' : 'get';
+            form.on('switch(requestType)', function (data) {
+                document.getElementById("requestTypekg").value = this.checked ? 'post' : 'get';
                 if(this.checked){
                     document.getElementById("postValue").style.display="";
                 }else{
