@@ -162,29 +162,29 @@ namespace smsmanager
                                                         if(requestType == "post")
                                                         {
                                                             string postData = element.GetElementsByTagName("postValue")[0].InnerText;
-                                                            string postData = postData.Replace("%phone%",tel);
-                                                            string postData = postData.Replace("%message%",text);
-                                                            string msgresult = HttpHelper.Post(requestUrl, postData);
+                                                            postData = postData.Replace("%phone%",tel);
+                                                            postData = postData.Replace("%message%",text);
+                                                            msgresult = HttpHelper.Post(requestUrl, postData);
                                                             JObject jsonObjresult = JObject.Parse(msgresult);
-                                                            string errcode1 = jsonObjresult["errcode"].ToString();
-                                                            string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                            string errcode = jsonObjresult["errcode"].ToString();
+                                                            string errmsg = jsonObjresult["errmsg"].ToString();
                                                             if (errcode == "0" && errmsg == "ok")
                                                             {
-                                                                Console.WriteLine("WebHook post转发成功");
+                                                                Console.WriteLine("WebHook POST转发成功");
                                                             }else{
                                                                 Console.WriteLine(errmsg);
                                                             }
                                                     
                                                         }else{
-                                                            string requestUrl = requestUrl.Replace("%phone%",tel);
-                                                            string requestUrl = requestUrl.Replace("%message%",text);
+                                                            requestUrl = requestUrl.Replace("%phone%",tel);
+                                                            requestUrl = requestUrl.Replace("%message%",text);
                                                             string msgresult = HttpHelper.HttpGet(requestUrl);
                                                             JObject jsonObjresult = JObject.Parse(msgresult);
-                                                            string errcode1 = jsonObjresult["errcode"].ToString();
-                                                            string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                            string errcode = jsonObjresult["errcode"].ToString();
+                                                            string errmsg = jsonObjresult["errmsg"].ToString();
                                                             if (errcode == "0" && errmsg == "ok")
                                                             {
-                                                                Console.WriteLine("WebHook post转发成功");
+                                                                Console.WriteLine("WebHook GET转发成功");
                                                             }else{
                                                                 Console.WriteLine(errmsg);
                                                             }
