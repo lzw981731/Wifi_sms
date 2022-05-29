@@ -164,25 +164,25 @@ namespace smsmanager
                                                             string postData = element.GetElementsByTagName("postValue")[0].InnerText;
                                                             postData = postData.Replace("%phone%",tel);
                                                             postData = postData.Replace("%message%",text);
-                                                            string resultCode = HttpHelper.PostResultCode(requestUrl, postData);
+                                                            string[] result = HttpHelper.PostResultCode(requestUrl, postData);
 
-                                                            if (resultCode == "ok")
+                                                            if (result[1] == "ok")
                                                             {
                                                                 Console.WriteLine("WebHook POST转发成功");
                                                             }else{
-                                                                Console.WriteLine(errmsg);
+                                                                Console.WriteLine(result[0]);
                                                             }
                                                     
                                                         }else{
                                                             requestUrl = requestUrl.Replace("%phone%",tel);
                                                             requestUrl = requestUrl.Replace("%message%",text);
-                                                            string resultCode = HttpHelper.HttpGetResultCode(requestUrl);
+                                                            string[] result = HttpHelper.HttpGetResultCode(requestUrl);
                                                             
-                                                            if (resultCode == "ok")
+                                                            if (result[1] == "ok")
                                                             {
                                                                 Console.WriteLine("WebHook GET转发成功");
                                                             }else{
-                                                                Console.WriteLine(errmsg);
+                                                                Console.WriteLine(result[0]);
                                                             }
                                                         }
                                                     }
