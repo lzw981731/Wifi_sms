@@ -164,11 +164,9 @@ namespace smsmanager
                                                             string postData = element.GetElementsByTagName("postValue")[0].InnerText;
                                                             postData = postData.Replace("%phone%",tel);
                                                             postData = postData.Replace("%message%",text);
-                                                            string msgresult = HttpHelper.Post(requestUrl, postData);
-                                                            JObject jsonObjresult = JObject.Parse(msgresult);
-                                                            string errcode = jsonObjresult["errcode"].ToString();
-                                                            string errmsg = jsonObjresult["errmsg"].ToString();
-                                                            if (errcode == "0" && errmsg == "ok")
+                                                            string resultCode = HttpHelper.PostResultCode(requestUrl, postData);
+
+                                                            if (resultCode == "ok")
                                                             {
                                                                 Console.WriteLine("WebHook POST转发成功");
                                                             }else{
@@ -178,11 +176,9 @@ namespace smsmanager
                                                         }else{
                                                             requestUrl = requestUrl.Replace("%phone%",tel);
                                                             requestUrl = requestUrl.Replace("%message%",text);
-                                                            string msgresult = HttpHelper.HttpGet(requestUrl);
-                                                            JObject jsonObjresult = JObject.Parse(msgresult);
-                                                            string errcode = jsonObjresult["errcode"].ToString();
-                                                            string errmsg = jsonObjresult["errmsg"].ToString();
-                                                            if (errcode == "0" && errmsg == "ok")
+                                                            string resultCode = HttpHelper.HttpGetResultCode(requestUrl);
+                                                            
+                                                            if (resultCode == "ok")
                                                             {
                                                                 Console.WriteLine("WebHook GET转发成功");
                                                             }else{
