@@ -722,6 +722,7 @@ namespace smsmanager.Controllers
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
                 ViewBag.reciveEmial = element.GetElementsByTagName("reciveEmial")[0].InnerText;
                 ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText=="0" ? "" : "checked=\"\"";
+                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=\"display:none\"" : "";
             }
             clear();
             return View();
@@ -737,15 +738,15 @@ namespace smsmanager.Controllers
             //遍历<Rule>下的所有子节点
             foreach (XmlElement element in topM)
             {
-                element.GetElementsByTagName("emailFowardStatus")[0].InnerText = emailFowardStatus == "" ? "0" : "1";
+                element.GetElementsByTagName("emailFowardStatus")[0].InnerText = emailFowardStatus == null ? "0" : "1";
                 element.GetElementsByTagName("smtpHost")[0].InnerText = smtp;
                 element.GetElementsByTagName("smtpPort")[0].InnerText = smtpport;
-                element.GetElementsByTagName("needVerify")[0].InnerText = needVerify == "" ? "0" : "1";
+                element.GetElementsByTagName("needVerify")[0].InnerText = needVerify == null ? "0" : "1";
                 element.GetElementsByTagName("userName")[0].InnerText = userName;
                 element.GetElementsByTagName("emailKey")[0].InnerText = key;
                 element.GetElementsByTagName("sendEmial")[0].InnerText = sendEmial;
                 element.GetElementsByTagName("reciveEmial")[0].InnerText = reciveEmial;
-                element.GetElementsByTagName("sslEnable")[0].InnerText = sslEnable == "" ? "0" : "1";
+                element.GetElementsByTagName("sslEnable")[0].InnerText = sslEnable == null ? "0" : "1";
             }
             MyXml.Save(orgCodePath);
 
@@ -760,6 +761,7 @@ namespace smsmanager.Controllers
                 ViewBag.sendEmial = element.GetElementsByTagName("sendEmial")[0].InnerText;
                 ViewBag.reciveEmial = element.GetElementsByTagName("reciveEmial")[0].InnerText;
                 ViewBag.sslEnable = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? "" : "checked=\"\"";
+                ViewBag.verifyNone = element.GetElementsByTagName("needVerify")[0].InnerText=="0" ? "style=\"display:none\"" : "";
             }
             clear();
             return View("Emailfoward");
@@ -777,6 +779,7 @@ namespace smsmanager.Controllers
                 ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "" : "checked=\"\"";
                 ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
                 ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
+                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=\"display:none\"" : "";
             }
             clear();
             return View();
@@ -792,8 +795,8 @@ namespace smsmanager.Controllers
             //遍历<Rule>下的所有子节点
             foreach (XmlElement element in topM)
             {
-                element.GetElementsByTagName("webHookfowardStatus")[0].InnerText = webHookfowardStatus == "" ? "0" : "1";
-                element.GetElementsByTagName("requestType")[0].InnerText = requestType == "" ? "get" : "post";
+                element.GetElementsByTagName("webHookfowardStatus")[0].InnerText = webHookfowardStatus == null ? "0" : "1";
+                element.GetElementsByTagName("requestType")[0].InnerText = requestType == null ? "get" : "post";
                 element.GetElementsByTagName("requestUrl")[0].InnerText = requestUrl;
                 element.GetElementsByTagName("postValue")[0].InnerText = postValue;
             }
@@ -805,6 +808,7 @@ namespace smsmanager.Controllers
                 ViewBag.requestType = element.GetElementsByTagName("requestType")[0].InnerText == "get" ? "" : "checked=\"\"";
                 ViewBag.requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
                 ViewBag.postValue = element.GetElementsByTagName("postValue")[0].InnerText;
+                ViewBag.requestTypeNone = element.GetElementsByTagName("requestType")[0].InnerText=="get" ? "style=\"display:none\"" : "";
             }
             clear();
             return View("WebHookfoward");
