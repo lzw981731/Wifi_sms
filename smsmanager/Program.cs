@@ -51,6 +51,10 @@ namespace smsmanager
                 CreateNode(xmlDoc, root, "sendEmial", "");
                 CreateNode(xmlDoc, root, "reciveEmial", "");
                 CreateNode(xmlDoc, root, "sslEnable", "");
+                CreateNode(xmlDoc, root, "webHookfowardStatus", "");
+                CreateNode(xmlDoc, root, "requestType", "");
+                CreateNode(xmlDoc, root, "requestUrl", "");
+                CreateNode(xmlDoc, root, "postValue", "");
                 CreateNode(xmlDoc, root, "WeChatQYFowardStatus", "0");
                 CreateNode(xmlDoc, root, "WeChatQYID", "");
                 CreateNode(xmlDoc, root, "WeChatQYApplicationID", "");
