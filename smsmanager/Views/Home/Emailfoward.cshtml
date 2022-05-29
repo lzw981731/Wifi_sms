@@ -27,28 +27,10 @@
         <form class="layui-form" action="EmailfowardStatusChange" method="post">
             <div class="layuimini-main">
                 <div class="layui-form layuimini-form">
-                    <div class="layui-form-item" style="display:none">
-                        <label class="layui-form-label required">kg</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="kg" id="kg" value="" lay-verify="required" class="layui-input" >
-                        </div>
-                    </div>
-                    <div class="layui-form-item" style="display:none">
-                        <label class="layui-form-label required">sslkg</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="sslkg" id="sslkg" value="" lay-verify="required" class="layui-input" >
-                        </div>
-                    </div>
-                    <div class="layui-form-item" style="display:none">
-                        <label class="layui-form-label required">sslkg</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="verifykg" id="verifykg" value="" lay-verify="required" class="layui-input" >
-                        </div>
-                    </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label required">短信邮箱转发开关:</label>
                         <div class="layui-input-block">
-                            <input type="checkbox" @ViewBag.status name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                            <input type="checkbox" @ViewBag.status name="emailFowardStatus" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -114,28 +96,7 @@
         //监听指定开关
         layui.use(['form'], function () {
             var form = layui.form
-            form.on('switch(switchTest)', function (data) {
-                document.getElementById("kg").value = this.checked ? 'true' : 'false';
-            });
-        });
-        
-    </script>
-    <script>
-        //监听指定开关
-        layui.use(['form'], function () {
-            var form = layui.form
-            form.on('switch(sslSwitch)', function (data) {
-                document.getElementById("sslkg").value = this.checked ? 'true' : 'false';
-            });
-        });
-        
-    </script>
-    <script>
-        //监听指定开关
-        layui.use(['form'], function () {
-            var form = layui.form
             form.on('switch(needVerify)', function (data) {
-                document.getElementById("verifykg").value = this.checked ? 'true' : 'false';
                 if(this.checked){
                     document.getElementById("userName").style.display="";
                     document.getElementById("emailkey").style.display="";
