@@ -51,7 +51,7 @@ namespace smsmanager
                 CreateNode(xmlDoc, root, "sendEmial", "");
                 CreateNode(xmlDoc, root, "reciveEmial", "");
                 CreateNode(xmlDoc, root, "sslEnable", "");
-                CreateNode(xmlDoc, root, "webHookfowardStatus", "");
+                CreateNode(xmlDoc, root, "webHookfowardStatus", "0");
                 CreateNode(xmlDoc, root, "requestType", "");
                 CreateNode(xmlDoc, root, "requestUrl", "");
                 CreateNode(xmlDoc, root, "postValue", "");
