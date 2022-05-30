@@ -56,7 +56,7 @@ namespace smsmanager
                     string qystatus = element.GetElementsByTagName("WeChatQYFowardStatus")[0].InnerText;
                     string webhookstatus = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText;
                     //Console.WriteLine(qystatus);
-                    if (status == "1")
+                    if (status == "1" && qystatus == "1" && webhookstatus == "1")
                     {
                         Thread.Sleep(1000);
                         var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
@@ -93,195 +93,118 @@ namespace smsmanager
                                                     MailAddress from = new MailAddress(element.GetElementsByTagName("sendEmial")[0].InnerText);
                                                     MailMessage mm = new MailMessage(from, to);
                                                     SmtpClient sc = new SmtpClient(element.GetElementsByTagName("smtpHost")[0].InnerText);
-                                                    try
-                                                    {
-                                                        mm.Subject = "短信转发" + tel;
-                                                        mm.Body = text;
-                                                        sc.DeliveryMethod = SmtpDeliveryMethod.Network;
-                                                        if(element.GetElementsByTagName("needVerify")[0].InnerText == "1"){
-                                                            sc.Credentials = new NetworkCredential(element.GetElementsByTagName("userName")[0].InnerText, element.GetElementsByTagName("emailKey")[0].InnerText);
-                                                        }
-                                                        sc.EnableSsl = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? false : true;
-                                                        sc.Send(mm);
-                                                        Console.WriteLine("转发成功");
-                                                        mm.Dispose();
-                                                        sc.Dispose();
-                                                    }
-                                                    catch (SmtpException ex)
-                                                    {
-                                                        mm.Dispose();
-                                                        sc.Dispose();
-                                                        Console.WriteLine(ex);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (webhookstatus == "1")
-                    {
-                        Thread.Sleep(1000);
-                        var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
-                        psi.RedirectStandardOutput = true;
-                        using (var process = System.Diagnostics.Process.Start(psi))
-                        {
-                            var output = process.StandardOutput.ReadToEnd();
-                            process.Kill();
-                            if (output != string.Empty && output.Trim() != "No sms messages were found")
-                            {
-                                //int count = 0;
-                                string[] qline = output.Split(Environment.NewLine.ToCharArray());
-                                for (int i = 0; i < qline.Count() - 1; i++)
-                                {
-                                    string[] theRow = qline[i].Split("(");
-                                    if (theRow[1].Trim() == "received)")
-                                    {
-                                        if (!ht.Contains(theRow[0].Trim().Split("SMS/")[1].ToString().Trim()))
-                                        {
-                                            string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
-                                            var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
-                                            psi2.RedirectStandardOutput = true;
-                                            using (var process2 = System.Diagnostics.Process.Start(psi2))
-                                            {
-                                                var output2 = process2.StandardOutput.ReadToEnd();
-                                                process2.Kill();
-                                                if (output2 != string.Empty)
-                                                {
-                                                    string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
-                                                    string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
-                                                    string text = qline2[4].Split("|      text:")[1].Trim();
-                                                    htWc.Add(sid, tel + "_" + text);
-                                                    try
-                                                    {
-                                                    
-                                                        string requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
-                                                        string requestType = element.GetElementsByTagName("requestType")[0].InnerText;
-                                                        if(requestType == "post")
+                                                    if (status == "1")
+                                                    {    
+                                                        try
                                                         {
-                                                            string postData = element.GetElementsByTagName("postValue")[0].InnerText;
-                                                            postData = postData.Replace("%phone%",tel);
-                                                            postData = postData.Replace("%message%",text);
-                                                            string[] result = HttpHelper.PostResultCode(requestUrl, postData);
+                                                            mm.Subject = "短信转发" + tel;
+                                                            mm.Body = text;
+                                                            sc.DeliveryMethod = SmtpDeliveryMethod.Network;
+                                                            if(element.GetElementsByTagName("needVerify")[0].InnerText == "1"){
+                                                                sc.Credentials = new NetworkCredential(element.GetElementsByTagName("userName")[0].InnerText, element.GetElementsByTagName("emailKey")[0].InnerText);
+                                                            }
+                                                            sc.EnableSsl = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? false : true;
+                                                            sc.Send(mm);
+                                                            Console.WriteLine("转发成功");
+                                                            mm.Dispose();
+                                                            sc.Dispose();                                                  
+                                                        }
+                                                        catch (SmtpException  ex)
+                                                        {
+                                                            mm.Dispose();
+                                                            sc.Dispose();
+                                                            Console.WriteLine(ex);
+                                                        }
+                                                    }
+                                                        
+                                                    if (webhookstatus == "1"){
+                                                        try
+                                                        {
+                                                            string requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
+                                                            string requestType = element.GetElementsByTagName("requestType")[0].InnerText;
+                                                            if(requestType == "post")
+                                                            {
+                                                                string postData = element.GetElementsByTagName("postValue")[0].InnerText;
+                                                                postData = postData.Replace("%phone%",tel);
+                                                                postData = postData.Replace("%message%",text);
+                                                                string[] result = HttpHelper.PostResultCode(requestUrl, postData);
 
-                                                            if (result[1] == HttpStatusCode.OK)
-                                                            {
-                                                                Console.WriteLine("WebHook POST转发成功");
-                                                            }else{
-                                                                Console.WriteLine(result[0]);
-                                                            }
+                                                                if (result[1] == HttpStatusCode.OK)
+                                                                {
+                                                                    Console.WriteLine("WebHook POST转发成功");
+                                                                }else{
+                                                                    Console.WriteLine(result[0]);
+                                                                }
                                                     
-                                                        }else{
-                                                            requestUrl = requestUrl.Replace("%phone%",tel);
-                                                            requestUrl = requestUrl.Replace("%message%",text);
-                                                            string[] result = HttpHelper.HttpGetResultCode(requestUrl);
-                                                            
-                                                            if (result[1] == HttpStatusCode.OK)
-                                                            {
-                                                                Console.WriteLine("WebHook GET转发成功");
                                                             }else{
-                                                                Console.WriteLine(result[0]);
+                                                                requestUrl = requestUrl.Replace("%phone%",tel);
+                                                                requestUrl = requestUrl.Replace("%message%",text);
+                                                                string[] result = HttpHelper.HttpGetResultCode(requestUrl);
+                                                            
+                                                                if (result[1] == HttpStatusCode.OK)
+                                                                {
+                                                                    Console.WriteLine("WebHook GET转发成功");
+                                                                }else{
+                                                                    Console.WriteLine(result[0]);
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                    catch (Exception ex)
-                                                    {
-                                                        Console.WriteLine(ex);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (qystatus == "1")
-                    {
-                        Thread.Sleep(1000);
-                        var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
-                        psi.RedirectStandardOutput = true;
-                        using (var process = System.Diagnostics.Process.Start(psi))
-                        {
-                            var output = process.StandardOutput.ReadToEnd();
-                            process.Kill();
-                            if (output != string.Empty && output.Trim() != "No sms messages were found")
-                            {
-                                //int count = 0;
-                                string[] qline = output.Split(Environment.NewLine.ToCharArray());
-                                for (int i = 0; i < qline.Count() - 1; i++)
-                                {
-                                    string[] theRow = qline[i].Split("(");
-                                    if (theRow[1].Trim() == "received)")
-                                    {
-                                        if (!htWc.Contains(theRow[0].Trim().Split("SMS/")[1].ToString().Trim()))
-                                        {
-                                            string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
-                                            var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
-                                            psi2.RedirectStandardOutput = true;
-                                            using (var process2 = System.Diagnostics.Process.Start(psi2))
-                                            {
-                                                var output2 = process2.StandardOutput.ReadToEnd();
-                                                process2.Kill();
-                                                if (output2 != string.Empty)
-                                                {
-                                                    string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
-                                                    string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
-                                                    string text = qline2[4].Split("|      text:")[1].Trim();
-                                                    htWc.Add(sid, tel + "_" + text);
-                                                    try
-                                                    {
-                                                        string corpid = element.GetElementsByTagName("WeChatQYID")[0].InnerText;
-                                                        string corpsecret = element.GetElementsByTagName("WeChatQYApplicationSecret")[0].InnerText;
-                                                        string agentid = element.GetElementsByTagName("WeChatQYApplicationID")[0].InnerText;
-                                                        string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corpid + "&corpsecret=" + corpsecret;
-                                                        string result = HttpHelper.HttpGet(url);
-                                                        JObject jsonObj = JObject.Parse(result);
-                                                        string errcode = jsonObj["errcode"].ToString();
-                                                        string errmsg = jsonObj["errmsg"].ToString();
-                                                        if (errcode == "0" && errmsg == "ok")
+                                                        catch (Exception  ex)
                                                         {
-                                                            string access_token = jsonObj["access_token"].ToString();
-                                                            JObject obj = new JObject();
-                                                            JObject obj1 = new JObject();
-                                                            obj.Add("touser", "@all");
-                                                            obj.Add("toparty", "");
-                                                            obj.Add("totag", "");
-                                                            obj.Add("msgtype", "text");
-                                                            obj.Add("agentid", agentid);
-                                                            obj1.Add("content", "短信转发_" + tel + "\n" + text);
-                                                            obj.Add("text", obj1);
-                                                            obj.Add("safe", 0);
-                                                            obj.Add("enable_id_trans", 0);
-                                                            obj.Add("enable_duplicate_check", 0);
-                                                            obj.Add("duplicate_check_interval", 1800);
-                                                            string msgurl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + access_token;
-                                                            string msgresult = HttpHelper.Post(msgurl, obj);
-                                                            JObject jsonObjresult = JObject.Parse(msgresult);
-                                                            string errcode1 = jsonObjresult["errcode"].ToString();
-                                                            string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                            Console.WriteLine(ex);
+                                                        }   
+                                                    }
+                                                    
+                                                    if (qystatus == "1"){
+                                                        try
+                                                        {
+                                                            string corpid = element.GetElementsByTagName("WeChatQYID")[0].InnerText;
+                                                            string corpsecret = element.GetElementsByTagName("WeChatQYApplicationSecret")[0].InnerText;
+                                                            string agentid = element.GetElementsByTagName("WeChatQYApplicationID")[0].InnerText;
+                                                            string url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corpid + "&corpsecret=" + corpsecret;
+                                                            string result = HttpHelper.HttpGet(url);
+                                                            JObject jsonObj = JObject.Parse(result);
+                                                            string errcode = jsonObj["errcode"].ToString();
+                                                            string errmsg = jsonObj["errmsg"].ToString();
                                                             if (errcode == "0" && errmsg == "ok")
                                                             {
-                                                                Console.WriteLine("企业微信转发成功");
-                                                            }
-                                                            else
-                                                            {
+                                                                string access_token = jsonObj["access_token"].ToString();
+                                                                JObject obj = new JObject();
+                                                                JObject obj1 = new JObject();
+                                                                obj.Add("touser", "@all");
+                                                                obj.Add("toparty", "");
+                                                                obj.Add("totag", "");
+                                                                obj.Add("msgtype", "text");
+                                                                obj.Add("agentid", agentid);
+                                                                obj1.Add("content", "短信转发_" + tel + "\n" + text);
+                                                                obj.Add("text", obj1);
+                                                                obj.Add("safe", 0);
+                                                                obj.Add("enable_id_trans", 0);
+                                                                obj.Add("enable_duplicate_check", 0);
+                                                                obj.Add("duplicate_check_interval", 1800);
+                                                                string msgurl = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + access_token;
+                                                                string msgresult = HttpHelper.Post(msgurl, obj);
+                                                                JObject jsonObjresult = JObject.Parse(msgresult);
+                                                                string errcode1 = jsonObjresult["errcode"].ToString();
+                                                                string errmsg1 = jsonObjresult["errmsg"].ToString();
+                                                                if (errcode == "0" && errmsg == "ok")
+                                                                {
+                                                                    Console.WriteLine("企业微信转发成功");
+                                                                }
+                                                                else
+                                                                {
+                                                                    Console.WriteLine(errmsg);
+                                                                }
+                                                                
+                                                            }else{
                                                                 Console.WriteLine(errmsg);
                                                             }
                                                         }
-                                                        else
+                                                        catch (Exception  ex)
                                                         {
-                                                            Console.WriteLine(errmsg);
+                                                            Console.WriteLine(ex);
                                                         }
-                                                        
                                                     }
-                                                    catch (Exception ex)
-                                                    {
-                                                        Console.WriteLine(ex);
-                                                    }
-                                                   
                                                 }
                                             }
                                         }
