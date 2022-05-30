@@ -166,7 +166,7 @@ namespace smsmanager
                                                             postData = postData.Replace("%message%",text);
                                                             string[] result = HttpHelper.PostResultCode(requestUrl, postData);
 
-                                                            if (result[1] == "ok")
+                                                            if (result[1] == HttpStatusCode.OK)
                                                             {
                                                                 Console.WriteLine("WebHook POST转发成功");
                                                             }else{
@@ -178,7 +178,7 @@ namespace smsmanager
                                                             requestUrl = requestUrl.Replace("%message%",text);
                                                             string[] result = HttpHelper.HttpGetResultCode(requestUrl);
                                                             
-                                                            if (result[1] == "ok")
+                                                            if (result[1] == HttpStatusCode.OK)
                                                             {
                                                                 Console.WriteLine("WebHook GET转发成功");
                                                             }else{
