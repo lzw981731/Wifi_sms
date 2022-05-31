@@ -56,7 +56,7 @@ namespace smsmanager
                     string qystatus = element.GetElementsByTagName("WeChatQYFowardStatus")[0].InnerText;
                     string webhookstatus = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText;
                     //Console.WriteLine(qystatus);
-                    if (status == "1" && qystatus == "1" && webhookstatus == "1")
+                    if (status == "1" || qystatus == "1" || webhookstatus == "1")
                     {
                         Thread.Sleep(1000);
                         var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
