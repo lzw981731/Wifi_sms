@@ -20,6 +20,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: ls -l && dotnet build --no-restore && ls -l
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: ls -l && dotnet publish -r linux-arm64 /p:PublishSingleFile=true
+    - name: Upload File
+      uses: actions/upload-artifact@master
+      with:
+          name: smsmanager
+          path: ./smsmanager/bin/Debug/net5.0/linux-arm64/publish
