@@ -280,14 +280,15 @@ namespace smsmanager
                                                 jobj1.Add("tel", tel);
                                                 jobj1.Add("text", text);
                                                 ja.Add(jobj1);
-                                            }
-                                            using (FileStream fs = new FileStream(smssavedPath, FileMode.OpenOrCreate,FileAccess.ReadWrite, FileShare.ReadWrite))
-                                            {
-                                                fs.Seek(0, SeekOrigin.Begin);
-                                                fs.SetLength(0);
-                                                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                                                
+                                                using (FileStream fs = new FileStream(smssavedPath, FileMode.OpenOrCreate,FileAccess.ReadWrite, FileShare.ReadWrite))
                                                 {
-                                                    sw.Write(ja.ToString());
+                                                    fs.Seek(0, SeekOrigin.Begin);
+                                                    fs.SetLength(0);
+                                                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                                                    {
+                                                        sw.Write(ja.ToString());
+                                                    }
                                                 }
                                             }
                                             htSa.Add(sid, tel + "_" + text);
