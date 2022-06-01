@@ -30,6 +30,7 @@ namespace smsmanager
 
         static Hashtable ht = new Hashtable();
         static Hashtable htWc = new Hashtable();
+        static Hashtable htWh = new Hashtable();
         static Hashtable htSa = new Hashtable();
 
         public void emailForward()
@@ -74,9 +75,9 @@ namespace smsmanager
                                     string[] theRow = qline[i].Split("(");
                                     if (theRow[1].Trim() == "received)")
                                     {
-                                        if (!ht.Contains(theRow[0].Trim().Split("SMS/")[1].ToString().Trim()))
+                                        string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
+                                        if (!ht.Contains(sid) || !htWc.Contains(sid) || !htWh.Contains(sid))
                                         {
-                                            string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
                                             var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
                                             psi2.RedirectStandardOutput = true;
                                             using (var process2 = System.Diagnostics.Process.Start(psi2))
@@ -89,11 +90,13 @@ namespace smsmanager
                                                     string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
                                                     string text = qline2[4].Split("|      text:")[1].Trim();
                                                     ht.Add(sid, tel + "_" + text);
+                                                    htWh.Add(sid, tel + "_" + text);
+                                                    htWc.Add(sid, tel + "_" + text);
                                                     MailAddress to = new MailAddress(element.GetElementsByTagName("reciveEmial")[0].InnerText);
                                                     MailAddress from = new MailAddress(element.GetElementsByTagName("sendEmial")[0].InnerText);
                                                     MailMessage mm = new MailMessage(from, to);
                                                     SmtpClient sc = new SmtpClient(element.GetElementsByTagName("smtpHost")[0].InnerText);
-                                                    if (status == "1")
+                                                    if (status == "1" && !ht.Contains(sid))
                                                     {    
                                                         try
                                                         {
@@ -117,7 +120,7 @@ namespace smsmanager
                                                         }
                                                     }
                                                         
-                                                    if (webhookstatus == "1"){
+                                                    if (webhookstatus == "1" && !htWh.Contains(sid)){
                                                         try
                                                         {
                                                             string requestUrl = element.GetElementsByTagName("requestUrl")[0].InnerText;
@@ -155,7 +158,7 @@ namespace smsmanager
                                                         }   
                                                     }
                                                     
-                                                    if (qystatus == "1"){
+                                                    if (qystatus == "1" && !htWc.Contains(sid)){
                                                         try
                                                         {
                                                             string corpid = element.GetElementsByTagName("WeChatQYID")[0].InnerText;
