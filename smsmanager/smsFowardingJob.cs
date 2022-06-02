@@ -115,10 +115,8 @@ namespace smsmanager
                                                             mm.Dispose();
                                                             sc.Dispose();                                                  
                                                         }
-                                                        catch (SmtpException  ex)
+                                                        catch (Exception ex)
                                                         {
-                                                            mm.Dispose();
-                                                            sc.Dispose();
                                                             Console.WriteLine(ex);
                                                         }
                                                     }
