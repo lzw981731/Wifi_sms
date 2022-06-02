@@ -57,7 +57,7 @@ namespace smsmanager
                     string qystatus = element.GetElementsByTagName("WeChatQYFowardStatus")[0].InnerText;
                     string webhookstatus = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText;
                     //Console.WriteLine(qystatus);
-                    if (status == "1" || qystatus == "1" || webhookstatus == "1")
+                    if (status == "1" || qystatus == "1" || webhookstatus == "1" || File.Exists(smssavedPath))
                     {
                         Thread.Sleep(1000);
                         var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
@@ -89,17 +89,20 @@ namespace smsmanager
                                                     string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
                                                     string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
                                                     string text = qline2[4].Split("|      text:")[1].Trim();
+                                                    string timestamp = qline2[8].Split("|")[1].Trim().Split("timestamp:")[1].Trim();
                                                     ht.Add(sid, tel + "_" + text);
                                                     htWh.Add(sid, tel + "_" + text);
                                                     htWc.Add(sid, tel + "_" + text);
-                                                    MailAddress to = new MailAddress(element.GetElementsByTagName("reciveEmial")[0].InnerText);
-                                                    MailAddress from = new MailAddress(element.GetElementsByTagName("sendEmial")[0].InnerText);
-                                                    MailMessage mm = new MailMessage(from, to);
-                                                    SmtpClient sc = new SmtpClient(element.GetElementsByTagName("smtpHost")[0].InnerText);
+                                                    htSa.Add(sid, tel + "_" + text);
+                                                    
                                                     if (status == "1" && !ht.Contains(sid))
                                                     {    
                                                         try
                                                         {
+                                                            MailAddress to = new MailAddress(element.GetElementsByTagName("reciveEmial")[0].InnerText);
+                                                            MailAddress from = new MailAddress(element.GetElementsByTagName("sendEmial")[0].InnerText);
+                                                            MailMessage mm = new MailMessage(from, to);
+                                                            SmtpClient sc = new SmtpClient(element.GetElementsByTagName("smtpHost")[0].InnerText);
                                                             mm.Subject = "短信转发" + tel;
                                                             mm.Body = text;
                                                             sc.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -108,7 +111,7 @@ namespace smsmanager
                                                             }
                                                             sc.EnableSsl = element.GetElementsByTagName("sslEnable")[0].InnerText == "0" ? false : true;
                                                             sc.Send(mm);
-                                                            Console.WriteLine("转发成功");
+                                                            Console.WriteLine("邮件转发成功");
                                                             mm.Dispose();
                                                             sc.Dispose();                                                  
                                                         }
@@ -130,24 +133,29 @@ namespace smsmanager
                                                                 string postData = element.GetElementsByTagName("postValue")[0].InnerText;
                                                                 postData = postData.Replace("%phone%",tel);
                                                                 postData = postData.Replace("%message%",text);
+                                                                postData = postData.Replace("%sendtime%",timestamp);
+                                                                
                                                                 string[] result = HttpHelper.PostResultCode(requestUrl, postData);
 
-                                                                if (result[1] == "200")
+                                                                if (result[1] == "OK")
                                                                 {
                                                                     Console.WriteLine("WebHook POST转发成功");
                                                                 }else{
+                                                                    Console.WriteLine("HTTPStatusCode:"+result[1]);
                                                                     Console.WriteLine(result[0]);
                                                                 }
                                                     
                                                             }else{
                                                                 requestUrl = requestUrl.Replace("%phone%",tel);
                                                                 requestUrl = requestUrl.Replace("%message%",text);
+                                                                requestUrl = requestUrl.Replace("%sendtime%",timestamp);
                                                                 string[] result = HttpHelper.HttpGetResultCode(requestUrl);
                                                             
-                                                                if (result[1] == "200")
+                                                                if (result[1] == "OK")
                                                                 {
                                                                     Console.WriteLine("WebHook GET转发成功");
                                                                 }else{
+                                                                    Console.WriteLine("HTTPStatusCode:"+result[1]);
                                                                     Console.WriteLine(result[0]);
                                                                 }
                                                             }
@@ -208,90 +216,58 @@ namespace smsmanager
                                                             Console.WriteLine(ex);
                                                         }
                                                     }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (File.Exists(smssavedPath))
-            {
-                Thread.Sleep(1000);
-                var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
-                psi.RedirectStandardOutput = true;
-                using (var process = System.Diagnostics.Process.Start(psi))
-                {
-                    var output = process.StandardOutput.ReadToEnd();
-                    process.Kill();
-                    if (output != string.Empty && output.Trim() != "No sms messages were found")
-                    {
-                        //int count = 0;
-                        string[] qline = output.Split(Environment.NewLine.ToCharArray());
-                        for (int i = 0; i < qline.Count() - 1; i++)
-                        {
-                            string[] theRow = qline[i].Split("(");
-                            if (theRow[1].Trim() == "received)")
-                            {
-                                if (!htSa.Contains(theRow[0].Trim().Split("SMS/")[1].ToString().Trim()))
-                                {
-                                    string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
-                                    var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
-                                    psi2.RedirectStandardOutput = true;
-                                    using (var process2 = System.Diagnostics.Process.Start(psi2))
-                                    {
-                                        var output2 = process2.StandardOutput.ReadToEnd();
-                                        process2.Kill();
-                                        if (output2 != string.Empty)
-                                        {
-                                            string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
-                                            string tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
-                                            string text = qline2[4].Split("|      text:")[1].Trim();
-                                            string timestamp = qline2[8].Split("|")[1].Trim().Split("timestamp:")[1].Trim();
-                                            JArray ja = new JArray();
-                                            StreamReader file = new StreamReader(smssavedPath, Encoding.Default);
-                                            string jsonstring = file.ReadToEnd();
-                                            file.Close();
-                                            file.Dispose();
-                                            bool SmsExistJudge = false;
-                                            if (jsonstring.Length>0)
-                                            {
-                                                Sms[] datas = JsonConvert.DeserializeObject<Sms[]>(jsonstring);
-                                                foreach(Sms item in datas)
-                                                {
-                                                    if (timestamp + "_" + tel + "_" + sid== item.sid)
-                                                    {
-                                                        SmsExistJudge = true;
-                                                    }
-                                                    JObject jobj = new JObject();
-                                                    jobj.Add("sid", item.sid);
-                                                    jobj.Add("tel", item.tel);
-                                                    jobj.Add("text", item.text);
-                                                    ja.Add(jobj);
-                                                }
-                                            }
-                                            if (!SmsExistJudge)
-                                            {
-                                                JObject jobj1 = new JObject();
-                                                jobj1.Add("sid", timestamp + "_" + tel + "_" + sid);
-                                                jobj1.Add("tel", tel);
-                                                jobj1.Add("text", text);
-                                                ja.Add(jobj1);
+                                                    if(File.Exists(smssavedPath) && !htSa.Contains(sid)){
+                                                        try{
+                                                            JArray ja = new JArray();
+                                                            StreamReader file = new StreamReader(smssavedPath, Encoding.Default);
+                                                            string jsonstring = file.ReadToEnd();
+                                                            file.Close();
+                                                            file.Dispose();
+                                                            bool SmsExistJudge = false;
+                                                            if (jsonstring.Length>0)
+                                                            {
+                                                                Sms[] datas = JsonConvert.DeserializeObject<Sms[]>(jsonstring);
+                                                                foreach(Sms item in datas)
+                                                                {
+                                                                    if (timestamp + "_" + tel + "_" + sid== item.sid)
+                                                                    {
+                                                                        SmsExistJudge = true;
+                                                                    }
+                                                                    JObject jobj = new JObject();
+                                                                    jobj.Add("sid", item.sid);
+                                                                    jobj.Add("tel", item.tel);
+                                                                    jobj.Add("text", item.text);
+                                                                    ja.Add(jobj);
+                                                                }
+                                                            }
+                                                            if (!SmsExistJudge)
+                                                            {
+                                                                JObject jobj1 = new JObject();
+                                                                jobj1.Add("sid", timestamp + "_" + tel + "_" + sid);
+                                                                jobj1.Add("tel", tel);
+                                                                jobj1.Add("text", text);
+                                                                ja.Add(jobj1);
                                                 
-                                                using (FileStream fs = new FileStream(smssavedPath, FileMode.OpenOrCreate,FileAccess.ReadWrite, FileShare.ReadWrite))
-                                                {
-                                                    fs.Seek(0, SeekOrigin.Begin);
-                                                    fs.SetLength(0);
-                                                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
-                                                    {
-                                                        sw.Write(ja.ToString());
+                                                                using (FileStream fs = new FileStream(smssavedPath, FileMode.OpenOrCreate,FileAccess.ReadWrite, FileShare.ReadWrite))
+                                                                {
+                                                                    fs.Seek(0, SeekOrigin.Begin);
+                                                                    fs.SetLength(0);
+                                                                    using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                                                                    {
+                                                                        sw.Write(ja.ToString());
+                                                                    }
+                                                                }
+                                                            }
+                                                            htSa.Add(sid, tel + "_" + text);
+                                                        
+                                                        }
+                                                        catch (Exception  ex)
+                                                        {
+                                                            Console.WriteLine(ex);
+                                                        }
                                                     }
                                                 }
                                             }
-                                            htSa.Add(sid, tel + "_" + text);
                                         }
                                     }
                                 }
