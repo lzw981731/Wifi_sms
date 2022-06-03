@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@master
       with:
           name: smsmanager
-          path: ./smsmanager/bin/Debug/net5.0/linux-arm64/publish
+          path: ./smsmanager/bin/Debug/net5.0/linux-arm64
