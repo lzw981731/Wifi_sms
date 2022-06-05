@@ -21,8 +21,10 @@ jobs:
       run: dotnet restore
     - name: Build
       run: ls -l && dotnet publish -r linux-arm64 /p:PublishSingleFile=true
+    - name: Finishing directory
+      run: mkdir compression && cp -rf ./smsmanager/bin/Debug/net5.0/linux-arm64/publish ./compression
     - name: Upload File
       uses: actions/upload-artifact@master
       with:
           name: smsmanager
-          path: ./smsmanager/bin/Debug/net5.0/linux-arm64
+          path: ./compression
