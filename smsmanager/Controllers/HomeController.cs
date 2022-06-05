@@ -335,7 +335,7 @@ namespace smsmanager.Controllers
                     //int count = 0;
                     List<Sms> list = new List<Sms>();
                     string[] qline = output.Split(Environment.NewLine.ToCharArray());
-                    for (int i = 0; i < qline.Count() - 1; i++)
+                    for (int i = 0; i < qline.Count(); i++)
                     {
                         string[] theRow = qline[i].Split("(");
                         if (theRow[1].Trim() == "unknown)")
