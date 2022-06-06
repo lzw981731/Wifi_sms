@@ -209,7 +209,7 @@ namespace smsmanager.Controllers
                                 {
                                     string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
                                     s.tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
-                                    s.text = qline2[4].Split("|      text:")[1].Trim();
+                                    s.text = qline2[4].Split("|              text:")[1].Trim();
                                 }
                             }
                             if (!string.IsNullOrEmpty(tel) && !string.IsNullOrEmpty(text))
@@ -335,7 +335,7 @@ namespace smsmanager.Controllers
                     //int count = 0;
                     List<Sms> list = new List<Sms>();
                     string[] qline = output.Split(Environment.NewLine.ToCharArray());
-                    for (int i = 0; i < qline.Count(); i++)
+                    for (int i = 0; i < qline.Count() - 1; i++)
                     {
                         string[] theRow = qline[i].Split("(");
                         if (theRow[1].Trim() == "unknown)")
@@ -352,7 +352,7 @@ namespace smsmanager.Controllers
                                 {
                                     string[] qline2 = output2.Split(Environment.NewLine.ToCharArray());
                                     s.tel = qline2[3].Split("|")[1].Trim().Split(":")[1].Trim();
-                                    s.text = qline2[4].Split("|      text:")[1].Trim();
+                                    s.text = qline2[4].Split("|            text:")[1].Trim();
                                 }
                             }
                             if (!string.IsNullOrEmpty(tel) && !string.IsNullOrEmpty(text))
