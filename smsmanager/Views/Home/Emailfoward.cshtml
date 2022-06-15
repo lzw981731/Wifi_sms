@@ -51,7 +51,7 @@
                             <input type="checkbox" @ViewBag.needVerify name="needVerify" lay-skin="switch" lay-filter="needVerify" lay-text="ON|OFF">
                         </div>
                     </div>
-                    <div class="layui-form-item">
+                    <div class="layui-form-item" id="tips" @ViewBag.verifyNone>
                         <a class="layui-form-label layui-icon layui-icon-tips"></a>
                         <div class="layui-input-block">
                             <a>如需将发送邮箱设置为QQ邮箱,需要将用户名设置为QQ号,密码设置为QQ邮箱授权码</a>
@@ -106,9 +106,11 @@
                 if(this.checked){
                     document.getElementById("userName").style.display="";
                     document.getElementById("emailkey").style.display="";
+                    document.getElementById("tips").style.display="";
                 }else{
                     document.getElementById("userName").style.display="none";
                     document.getElementById("emailkey").style.display="none";
+                    document.getElementById("tips").style.display="none";
                 }
             });
         });
