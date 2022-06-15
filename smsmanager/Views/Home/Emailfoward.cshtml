@@ -45,10 +45,16 @@
                             <input type="text" name="smtpport" value="@ViewBag.smtpPort" lay-verify="required|number" class="layui-input" lay-reqtext="smtp服务器不能为空" placeholder="请输入smtp服务器">
                         </div>
                     </div>
-                     <div class="layui-form-item">
+                    <div class="layui-form-item">
                         <label class="layui-form-label required">需要验证:</label>
                         <div class="layui-input-block">
                             <input type="checkbox" @ViewBag.needVerify name="needVerify" lay-skin="switch" lay-filter="needVerify" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <a class="layui-form-label layui-icon layui-icon-tips"></a>
+                        <div class="layui-input-block">
+                            <a>如需将发送邮箱设置为QQ邮箱,需要将用户名设置为QQ号,密码设置为QQ邮箱授权码</a>
                         </div>
                     </div>
                     <div class="layui-form-item" id="userName" @ViewBag.verifyNone>
