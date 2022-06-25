@@ -34,7 +34,10 @@ namespace smsmanager
         {
             string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
             string smssavedPath = AppDomain.CurrentDomain.BaseDirectory + "smssaved.json";
-            if (!File.Exists(orgCodePath))
+            long orgCodePathLength = new System.IO.FileInfo(orgCodePath).Length;
+            long smssavedPathLength = new System.IO.FileInfo(smssavedPath).Length;
+            
+            if (!File.Exists(orgCodePath) || orgCodePathLength == 0)
             {
                 XmlDocument xmlDoc = new XmlDocument();
                 //创建根节点  
@@ -69,7 +72,7 @@ namespace smsmanager
                     Console.WriteLine(e.Message);
                 }
             }
-            if (!File.Exists(smssavedPath))
+            if (!File.Exists(smssavedPath) || smssavedPathLength == 0)
             {
                 FileStream fs = new FileStream(smssavedPath, FileMode.Create);
                 fs.Close();
