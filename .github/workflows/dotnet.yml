@@ -26,5 +26,5 @@ jobs:
     - name: Upload File
       uses: actions/upload-artifact@master
       with:
-          name: smsmanager
+          name: WiFismsmanager
           path: ./compression
