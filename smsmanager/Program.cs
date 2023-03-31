@@ -32,7 +32,7 @@ namespace smsmanager
 
         public static void isXmlExist()
         {
-            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.txt";
+            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "login.txt";
             string smssavedPath = AppDomain.CurrentDomain.BaseDirectory + "smssaved.json";
             long orgCodePathLength = new System.IO.FileInfo(orgCodePath).Length;
             long smssavedPathLength = new System.IO.FileInfo(smssavedPath).Length;
