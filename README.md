@@ -7,3 +7,4 @@ sudo dotnet smsmanager.dll
 程序运行后，访问设备的ip:8080即可进入管理页面，
 - 默认用户为admin,密码为password
 # Cloud Build Trigger
+trigger workflow
