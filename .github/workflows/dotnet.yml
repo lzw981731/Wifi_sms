@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET
+    - name: Setup .NET 5.0
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 5.0.x
     - name: Restore dependencies
       run: dotnet restore smsmanager/smsmanager.csproj
     - name: Build
@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: WiFismsmanager
-          path: smsmanager/bin/Release/net8.0/linux-arm64/publish/
+          path: smsmanager/bin/Release/net5.0/linux-arm64/publish/
