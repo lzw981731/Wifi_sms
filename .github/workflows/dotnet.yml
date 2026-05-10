@@ -11,6 +11,8 @@ jobs:
   build:
 
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -34,8 +36,9 @@ jobs:
           path: smsmanager/bin/Release/net8.0/linux-arm64/publish/
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: smsmanager/bin/Release/net8.0/WiFismsmanager-linux-arm64.tar.gz
+        token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
