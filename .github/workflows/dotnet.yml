@@ -9,14 +9,14 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET 5.0
+    - name: Setup .NET 6.0
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore smsmanager/smsmanager.csproj
     - name: Build
@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: WiFismsmanager
-          path: smsmanager/bin/Release/net5.0/linux-arm64/publish/
+          path: smsmanager/bin/Release/net6.0/linux-arm64/publish/
