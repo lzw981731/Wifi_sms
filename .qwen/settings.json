@@ -6,7 +6,9 @@
       "Bash(del *)",
       "Bash(where *)",
       "Bash(dir *)",
-      "Bash(wsl *)"
+      "Bash(wsl *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   },
   "$version": 3

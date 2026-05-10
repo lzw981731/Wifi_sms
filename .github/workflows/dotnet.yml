@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -12,19 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore smsmanager/smsmanager.csproj
     - name: Build
-      run: ls -l && dotnet publish -r linux-arm64 /p:PublishSingleFile=true
-    - name: Finishing directory
-      run: mkdir compression && cp -rf ./smsmanager/bin/Debug/net5.0/linux-arm64/publish ./compression
+      run: dotnet publish smsmanager/smsmanager.csproj -c Release -r linux-arm64 --self-contained /p:PublishSingleFile=true
     - name: Upload File
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v4
       with:
           name: WiFismsmanager
-          path: ./compression
+          path: smsmanager/bin/Release/net8.0/linux-arm64/publish/

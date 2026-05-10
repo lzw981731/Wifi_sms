@@ -6,3 +6,4 @@ sudo dotnet smsmanager.dll
 即可运行程序，当然你也可以安装screen，在screen内运行程序从而达到后台运行的效果
 程序运行后，访问设备的ip:8080即可进入管理页面，
 - 默认用户为admin,密码为password
+# Cloud Build Trigger
