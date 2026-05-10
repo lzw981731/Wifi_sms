@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell *)",
+      "Bash(python *)",
+      "Bash(del *)",
+      "Bash(where *)",
+      "Bash(dir *)",
+      "Bash(wsl *)"
+    ]
+  },
+  "$version": 3
+}

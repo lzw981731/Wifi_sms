@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>邮箱转发信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="~/layuimini/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="~/layuimini/css/public.css" media="all">
+    <style>
+        .layui-form-item .layui-input-company {
+            width: auto;
+            padding-right: 10px;
+            line-height: 38px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layuimini-container">
+        <form class="layui-form" action="EmailfowardStatusChange" method="post">
+            <div class="layuimini-main">
+                <div class="layui-form layuimini-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">短信邮箱转发开关:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" @ViewBag.status name="emailFowardStatus" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">smtp服务器:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="smtp" value="@ViewBag.smtp" lay-verify="required" class="layui-input" lay-reqtext="smtp服务器不能为空" placeholder="请输入smtp服务器">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">smtp端口:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="smtpport" value="@ViewBag.smtpPort" lay-verify="required|number" class="layui-input" lay-reqtext="smtp服务器不能为空" placeholder="请输入smtp服务器">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">需要验证:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" @ViewBag.needVerify name="needVerify" lay-skin="switch" lay-filter="needVerify" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="tips" @ViewBag.verifyNone>
+                        <a class="layui-form-label layui-icon layui-icon-tips"></a>
+                        <div class="layui-input-block">
+                            <a class="layui-form-mid layui-word-aux">如需将发送邮箱设置为QQ邮箱,需要将用户名设置为QQ号,密码设置为QQ邮箱授权码</a>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="userName" @ViewBag.verifyNone>
+                        <label class="layui-form-label required">用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="userName" value="@ViewBag.userName" lay-verify="required" class="layui-input" lay-reqtext="用户名不能为空" placeholder="请输入用户名">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="emailkey" @ViewBag.verifyNone>
+                        <label class="layui-form-label required">密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="key" value="@ViewBag.key" lay-verify="required" class="layui-input" lay-reqtext="密码不能为空" placeholder="请输入邮箱密码">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">发件人邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sendEmial" value="@ViewBag.sendEmial" lay-verify="required|email" class="layui-input" lay-reqtext="发件人邮箱不能为空" placeholder="请输入发件人邮箱">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">收件人邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="reciveEmial" value="@ViewBag.reciveEmial" lay-verify="required|email" class="layui-input" lay-reqtext="收件人邮箱不能为空" placeholder="请输入收件人邮箱">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">启用SSL加密:</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" @ViewBag.sslEnable name="sslEnable" lay-skin="switch" lay-filter="sslSwitch" lay-text="ON|OFF">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="submit" class="layui-btn layui-btn-normal" value="提交" name="sub" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="~/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="~/layuimini/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+    <script>
+        //监听指定开关
+        layui.use(['form'], function () {
+            var form = layui.form
+            form.on('switch(needVerify)', function (data) {
+                if(this.checked){
+                    document.getElementById("userName").style.display="";
+                    document.getElementById("emailkey").style.display="";
+                    document.getElementById("tips").style.display="";
+                }else{
+                    document.getElementById("userName").style.display="none";
+                    document.getElementById("emailkey").style.display="none";
+                    document.getElementById("tips").style.display="none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
