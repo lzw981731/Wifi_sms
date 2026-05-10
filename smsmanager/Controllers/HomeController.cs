@@ -899,6 +899,47 @@ namespace smsmanager.Controllers
             return View("Barkfoward");
         }
 
+
+        public IActionResult Tgfoward()
+        {
+            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(orgCodePath);
+            XmlNodeList topM = xmldoc.SelectNodes("//userSettings");
+            foreach (XmlElement element in topM)
+            {
+                ViewBag.status = element.GetElementsByTagName("tgFowardStatus")[0].InnerText == "0" ? "" : "checked=\"\"" ;
+                ViewBag.tgBotToken = element.GetElementsByTagName("tgBotToken")[0].InnerText;
+                ViewBag.tgChatId = element.GetElementsByTagName("tgChatId")[0].InnerText;
+            }
+            clear();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult TgfowardStatusChange(string kg, string tgBotToken, string tgChatId)
+        {
+            string orgCodePath = AppDomain.CurrentDomain.BaseDirectory + "loginpassw.xml";
+            XmlDocument MyXml = new XmlDocument();
+            MyXml.Load(orgCodePath);
+            XmlNodeList topM = MyXml.SelectNodes("//userSettings");
+            foreach (XmlElement element in topM)
+            {
+                element.GetElementsByTagName("tgFowardStatus")[0].InnerText = kg == "false" ? "0" : "1";
+                element.GetElementsByTagName("tgBotToken")[0].InnerText = tgBotToken;
+                element.GetElementsByTagName("tgChatId")[0].InnerText = tgChatId;
+            }
+            MyXml.Save(orgCodePath);
+
+            foreach (XmlElement element in topM)
+            {
+                ViewBag.status = element.GetElementsByTagName("tgFowardStatus")[0].InnerText == "0" ? "" : "checked=\"\"" ;
+                ViewBag.tgBotToken = element.GetElementsByTagName("tgBotToken")[0].InnerText;
+                ViewBag.tgChatId = element.GetElementsByTagName("tgChatId")[0].InnerText;
+            }
+            clear();
+            return View("Tgfoward");
+        }
+
         public IActionResult EditPwd()
         {
             if (HttpContext.Session.GetString("uname") == null)

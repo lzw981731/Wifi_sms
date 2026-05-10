@@ -65,6 +65,9 @@ namespace smsmanager
                 CreateNode(xmlDoc, root, "barkFowardStatus", "0");
                 CreateNode(xmlDoc, root, "barkServerUrl", "https://api.day.app");
                 CreateNode(xmlDoc, root, "barkDeviceKey", "");
+                CreateNode(xmlDoc, root, "tgFowardStatus", "0");
+                CreateNode(xmlDoc, root, "tgBotToken", "");
+                CreateNode(xmlDoc, root, "tgChatId", "");
                 try
                 {
                     xmlDoc.Save(orgCodePath);

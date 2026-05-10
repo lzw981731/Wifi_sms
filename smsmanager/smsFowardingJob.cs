@@ -33,6 +33,7 @@ namespace smsmanager
         static Hashtable htWh = new Hashtable();
         static Hashtable htSa = new Hashtable();
         static Hashtable htBk = new Hashtable();
+        static Hashtable htTg = new Hashtable();
 
         public void emailForward()
         {
@@ -58,8 +59,9 @@ namespace smsmanager
                     string qystatus = element.GetElementsByTagName("WeChatQYFowardStatus")[0].InnerText;
                     string webhookstatus = element.GetElementsByTagName("webHookfowardStatus")[0].InnerText;
                     string barkstatus = element.GetElementsByTagName("barkFowardStatus")[0].InnerText;
+                    string tgstatus = element.GetElementsByTagName("tgFowardStatus")[0].InnerText;
                     //Console.WriteLine(qystatus);
-                    if (status == "1" || qystatus == "1" || webhookstatus == "1" || barkstatus == "1" || File.Exists(smssavedPath))
+                    if (status == "1" || qystatus == "1" || webhookstatus == "1" || barkstatus == "1" || tgstatus == "1" || File.Exists(smssavedPath))
                     {
                         Thread.Sleep(1000);
                         var psi = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 --messaging-list-sms");
@@ -78,7 +80,7 @@ namespace smsmanager
                                     if (theRow[1].Trim() == "received)")
                                     {
                                         string sid = theRow[0].Trim().Split("SMS/")[1].ToString().Trim();
-                                        if (!ht.Contains(sid) || !htWc.Contains(sid) || !htWh.Contains(sid) || !htSa.Contains(sid) || !htBk.Contains(sid))
+                                        if (!ht.Contains(sid) || !htWc.Contains(sid) || !htWh.Contains(sid) || !htSa.Contains(sid) || !htBk.Contains(sid) || !htTg.Contains(sid))
                                         {
                                             var psi2 = new System.Diagnostics.ProcessStartInfo("mmcli", " -m 0 -s " + sid);
                                             psi2.RedirectStandardOutput = true;
@@ -230,6 +232,34 @@ namespace smsmanager
                                                             else
                                                             {
                                                                 Console.WriteLine("BarkStatusCode:" + result[1]);
+                                                                Console.WriteLine(result[0]);
+                                                            }
+                                                        }
+                                                        catch (Exception  ex)
+                                                        {
+                                                            Console.WriteLine(ex);
+                                                        }
+                                                    }
+                                                    if (tgstatus == "1" && !htTg.Contains(sid)){
+                                                        try
+                                                        {
+                                                            htTg.Add(sid, tel + "_" + text);
+                                                            string tgBotToken = element.GetElementsByTagName("tgBotToken")[0].InnerText;
+                                                            string tgChatId = element.GetElementsByTagName("tgChatId")[0].InnerText;
+                                                            string tgMessage = "📱 *短信转发*\n\n发送者: " + tel + "\n内容: " + text;
+                                                            string tgUrl = "https://api.telegram.org/bot" + tgBotToken + "/sendMessage";
+                                                            JObject tgObj = new JObject();
+                                                            tgObj.Add("chat_id", tgChatId);
+                                                            tgObj.Add("text", tgMessage);
+                                                            tgObj.Add("parse_mode", "Markdown");
+                                                            string[] result = HttpHelper.PostResultCode(tgUrl, tgObj.ToString());
+                                                            if (result[1] == "OK")
+                                                            {
+                                                                Console.WriteLine("Telegram转发成功");
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine("TelegramStatusCode:" + result[1]);
                                                                 Console.WriteLine(result[0]);
                                                             }
                                                         }

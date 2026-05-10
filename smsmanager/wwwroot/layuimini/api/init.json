@@ -68,6 +68,12 @@
           "href": "Home/Barkfoward",
           "icon": "fa fa-file-text",
           "target": "_self"
+        },
+        {
+          "title": "Telegram推送转发",
+          "href": "Home/Tgfoward",
+          "icon": "fa fa-file-text",
+          "target": "_self"
         }
       ]
     }
