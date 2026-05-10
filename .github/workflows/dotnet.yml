@@ -9,14 +9,16 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET 8.0
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+    - name: Install .NET 8.0
+      run: |
+        curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+        chmod +x dotnet-install.sh
+        ./dotnet-install.sh --channel 8.0
+        echo "$HOME/.dotnet" >> $GITHUB_PATH
     - name: Restore dependencies
       run: dotnet restore smsmanager/smsmanager.csproj
     - name: Build
