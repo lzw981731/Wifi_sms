@@ -3,6 +3,7 @@ name: .NET
 on:
   push:
     branches: [ main, master ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ main, master ]
 
@@ -22,9 +23,19 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore smsmanager/smsmanager.csproj
     - name: Build
-      run: dotnet publish smsmanager/smsmanager.csproj -c Release -r linux-arm64 --self-contained /p:PublishSingleFile=true
-    - name: Upload File
+      run: |
+        dotnet publish smsmanager/smsmanager.csproj -c Release -r linux-arm64 --self-contained /p:PublishSingleFile=true
+        cd smsmanager/bin/Release/net8.0/linux-arm64/publish/
+        tar -czf ../../../WiFismsmanager-linux-arm64.tar.gz *
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
           name: WiFismsmanager
           path: smsmanager/bin/Release/net8.0/linux-arm64/publish/
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: smsmanager/bin/Release/net8.0/WiFismsmanager-linux-arm64.tar.gz
+        draft: false
+        prerelease: false
